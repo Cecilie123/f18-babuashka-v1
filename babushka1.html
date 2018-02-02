@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka 1</title>
+
+</head>
+
+<style>
+    .templateModtager {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        /*max-width: 100%;*/
+        margin: 0 auto;
+        grid-gap: 10px;
+    }
+
+    .ret {
+        padding: 10px;
+        text-align: left;
+    }
+
+    .ret:nth-child(odd) {
+        background: pink;
+    }
+</style>
+
+<body>
+    <div class="templateModtager">
+
+        <template class="babushkaTemplate">
+    <div class="ret">
+    <h1 class="navn"></h1>
+    <img class="billede">
+    <p class="kategori"></p>
+    <p class="pris"></p>
+    <p class="kortbeskrivelse"></p>
+    <p class="oprindelsesregion"></p>
+    
+</div>
+    </template>
+    </div>
+    <script>
+        let menu;
+
+        document.addEventListener("DOMContentLoaded", loadJson);
+
+        let modtager = document.querySelector(".templateModtager");
+        let template = document.querySelector(".babushkaTemplate");
+
+        async function loadJson() {
+
+            let object = await fetch("menu.json");
+            menu = await object.json();
+
+            console.log(menu);
+
+            visMenu(menu);
+
+        }
+
+        function visMenu(menu) {
+
+            menu.forEach(hverRet => {
+                let klon = template.cloneNode(true).content;
+                klon.querySelector(".navn").textContent = hverRet.navn;
+                klon.querySelector(".billede").src = "babushka assets/imgs/small/" +
+                    hverRet.billede + "-sm.jpg";
+                klon.querySelector(".kategori").textContent = hverRet.kategori;
+                klon.querySelector(".kortbeskrivelse").textContent = hverRet.kortbeskrivelse;
+                klon.querySelector(".oprindelsesregion").textContent = hverRet.oprindelsesregion;
+                klon.querySelector(".pris").textContent = hverRet.pris;
+                modtager.appendChild(klon);
+
+
+
+            })
+
+        }
+    </script>
+</body>
+
+</html>
